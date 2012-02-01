@@ -26,8 +26,7 @@ class Messages {
 	
 	//-----------------------------------------------------------------------------------------------
 	// Class Variables
-	//-----------------------------------------------------------------------------------------------	
-	private $msgId;
+	//-----------------------------------------------------------------------------------------------		
 	private $msgTypes = array( 'help', 'info', 'warning', 'success', 'error' );
 	private $msgClass = 'php-flash-messages';
 	private $msgWrapper = "<div class='%s %s'><a href='#' class='closeMessage'></a>\n%s</div>\n";
@@ -38,10 +37,7 @@ class Messages {
 	//-----------------------------------------------------------------------------------------------
 	// __construct()
 	//-----------------------------------------------------------------------------------------------
-	public function __construct() {
-	
-		// Generate a unique ID for this user and session
-		$this->msgId = md5(uniqid());
+	public function __construct() {	
 		
 		// Create the session array if it doesnt already exist
 		if( !array_key_exists('flash_messages', $_SESSION) ) $_SESSION['flash_messages'] = array();
