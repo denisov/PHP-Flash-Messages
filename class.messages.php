@@ -27,12 +27,12 @@ class Messages {
 	//-----------------------------------------------------------------------------------------------
 	// Class Variables
 	//-----------------------------------------------------------------------------------------------	
-	var $msgId;
-	var $msgTypes = array( 'help', 'info', 'warning', 'success', 'error' );
-	var $msgClass = 'php-flash-messages';
-	var $msgWrapper = "<div class='%s %s'><a href='#' class='closeMessage'></a>\n%s</div>\n";
-	var $msgBefore = '<p>';
-	var $msgAfter = "</p>\n";
+	private $msgId;
+	private $msgTypes = array( 'help', 'info', 'warning', 'success', 'error' );
+	private $msgClass = 'php-flash-messages';
+	private $msgWrapper = "<div class='%s %s'><a href='#' class='closeMessage'></a>\n%s</div>\n";
+	private $msgBefore = '<p>';
+	private $msgAfter = "</p>\n";
 
 	
 	//-----------------------------------------------------------------------------------------------
