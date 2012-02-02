@@ -22,11 +22,25 @@
 //
 //--------------------------------------------------------------------------------------------------
 
-class Messages {
+class FlashMessages {
 	
 	//-----------------------------------------------------------------------------------------------
 	// Class Variables
 	//-----------------------------------------------------------------------------------------------		
+	
+	const HELP    = 1;
+	const INFO    = 2;
+	const WARNING = 3;
+	const SUCCESS = 4;
+	const ERROR   = 5;
+	
+	private $valid_types = array(
+		self::HELP,
+		self::INFO,
+		self::WARNING,
+		self::ERROR
+	);
+	
 	private $msgTypes = array( 'help', 'info', 'warning', 'success', 'error' );
 	private $msgClass = 'php-flash-messages';
 	private $msgWrapper = "<div class='%s %s'><a href='#' class='closeMessage'></a>\n%s</div>\n";
@@ -56,11 +70,7 @@ class Messages {
 
 		// Replace any shorthand codes with their full version
 		if( strlen(trim($type)) == 1 ) {
-			$type = str_replace( array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type );
-		
-		// Backwards compatibility...
-		} elseif( $type == 'information' ) {
-			$type = 'info';	
+			$type = str_replace( array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type );		
 		}
 		
 		// Make sure it's a valid message type
@@ -84,12 +94,7 @@ class Messages {
 		$data = '';
 		
 		if( !isset($_SESSION['flash_messages']) ) return false;
-		
-		if( $type == 'g' || $type == 'growl' ) {
-			$this->displayGrowlMessages();
-			return true;
-		}
-		
+	
 		// Print a certain type of message?
 		if( in_array($type, $this->msgTypes) ) {
 			foreach( $_SESSION['flash_messages'][$type] as $msg ) {
@@ -170,14 +175,6 @@ class Messages {
 		return true;
 	}
 	
-	//-----------------------------------------------------------------------------------------------
-	// __destruct()
-	// Purges all of the messages from the session data
-	//-----------------------------------------------------------------------------------------------
-	public function __destruct() {
-		//$this->clear();
-	}
-
 
 } // end class
 ?>

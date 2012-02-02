@@ -8,7 +8,7 @@ if( !session_id() ) session_start();
 // Include the Messages class and instantiate it
 //------------------------------------------------------------------------------
 require_once('../class.messages.php');
-$msg = new Messages();
+$msg = new FlashMessages();
 
 //------------------------------------------------------------------------------
 // Process the form if it was submitted
