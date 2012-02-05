@@ -22,31 +22,27 @@
 //
 //--------------------------------------------------------------------------------------------------
 
+require_once dirname(__FILE__) . '/flashmessageswriter.php';
+
 class FlashMessages {
 	
 	//-----------------------------------------------------------------------------------------------
 	// Class Variables
 	//-----------------------------------------------------------------------------------------------		
 	
-	const HELP    = 1;
 	const INFO    = 2;
 	const WARNING = 3;
 	const SUCCESS = 4;
 	const ERROR   = 5;
 	
-	private $valid_types = array(
-		self::HELP,
+	private $valid_types = array(	
 		self::INFO,
 		self::WARNING,
+		self::SUCCESS,
 		self::ERROR
 	);
 	
-	private $msgTypes = array( 'help', 'info', 'warning', 'success', 'error' );
-	private $msgClass = 'php-flash-messages';
-	private $msgWrapper = "<div class='%s %s'><a href='#' class='closeMessage'></a>\n%s</div>\n";
-	private $msgBefore = '<p>';
-	private $msgAfter = "</p>\n";
-
+	private $writer;
 	
 	//-----------------------------------------------------------------------------------------------
 	// __construct()
@@ -56,6 +52,7 @@ class FlashMessages {
 		// Create the session array if it doesnt already exist
 		if( !array_key_exists('flash_messages', $_SESSION) ) $_SESSION['flash_messages'] = array();
 		
+		$this->writer = new FlashMessagesWriter($this);
 	}
 	
 	//-----------------------------------------------------------------------------------------------
@@ -64,17 +61,14 @@ class FlashMessages {
 	//-----------------------------------------------------------------------------------------------
 	public function add($type, $message) {
 		
-		if( !isset($_SESSION['flash_messages']) ) return false;
+		if( !isset($_SESSION['flash_messages']) ) throw new Exception('$_SESSION[\'flash_messages\'] is not set');
 		
-		if( !isset($type) || !isset($message[0]) ) return false;
-
-		// Replace any shorthand codes with their full version
-		if( strlen(trim($type)) == 1 ) {
-			$type = str_replace( array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type );		
-		}
+		if( !isset($type) ) throw new Exception("'Type' is not set");
+		
+		if ( empty($message)) throw new Exception('message is empty');
 		
 		// Make sure it's a valid message type
-		if( !in_array($type, $this->msgTypes) ) die('"' . strip_tags($type) . '" is not a valid message type!' );
+		if( !in_array($type, $this->valid_types) )	throw new Exception('"' . $type . '" is not a valid message type!' );
 		
 		// If the session array doesn't exist, create it
 		if( !array_key_exists( $type, $_SESSION['flash_messages'] ) ) $_SESSION['flash_messages'][$type] = array();
@@ -89,47 +83,8 @@ class FlashMessages {
 	// display()
 	// print queued messages to the screen
 	//-----------------------------------------------------------------------------------------------
-	public function display($type='all', $print=true) {
-		$messages = '';
-		$data = '';
-		
-		if( !isset($_SESSION['flash_messages']) ) return false;
-	
-		// Print a certain type of message?
-		if( in_array($type, $this->msgTypes) ) {
-			foreach( $_SESSION['flash_messages'][$type] as $msg ) {
-				$messages .= $this->msgBefore . $msg . $this->msgAfter;
-			}
-
-			$data .= sprintf($this->msgWrapper, $this->msgClass, $type, $messages);
-			
-			// Clear the viewed messages
-			$this->clear($type);
-		
-		// Print ALL queued messages
-		} elseif( $type == 'all' ) {
-			foreach( $_SESSION['flash_messages'] as $type => $msgArray ) {
-				$messages = '';
-				foreach( $msgArray as $msg ) {
-					$messages .= $this->msgBefore . $msg . $this->msgAfter;	
-				}
-				$data .= sprintf($this->msgWrapper, $this->msgClass, $type, $messages);
-			}
-			
-			// Clear ALL of the messages
-			$this->clear();
-		
-		// Invalid Message Type?
-		} else { 
-			return false;
-		}
-		
-		// Print everything to the screen or return the data
-		if( $print ) { 
-			echo $data; 
-		} else { 
-			return $data; 
-		}
+	public function display($type=null, $print=true) {
+		return $this->writer->display($type, $print);
 	}
 	
 	
@@ -137,44 +92,63 @@ class FlashMessages {
 	// hasErrors()
 	// Checks to see if there are any queued error messages
 	//-----------------------------------------------------------------------------------------------
-	public function hasErrors() { return empty($_SESSION['flash_messages']['error']) ? false : true;	}
-	
-	
+	public function hasErrors()
+	{
+		if (empty($_SESSION['flash_messages'][self::ERROR]))
+			return false;
+		else
+			return true;
+	}
+
 	//-----------------------------------------------------------------------------------------------
 	// hasMessages()
 	// Checks to see if there are queued messages of any kind
 	//-----------------------------------------------------------------------------------------------
-	public function hasMessages($type=null) {
-		if( !is_null($type) ) {
-			if( !empty($_SESSION['flash_messages'][$type]) ) return $_SESSION['flash_messages'][$type];	
-		} else {
-			foreach( $this->msgTypes as $type ) {
-				if( !empty($_SESSION['flash_messages']) ) return true;	
+	public function hasMessages($type = null)
+	{		
+		if (!is_null($type))
+		{		
+			if (!empty($_SESSION['flash_messages'][$type]))
+				return true;
+		} else
+		{
+			
+			foreach ($this->valid_types as $type)
+			{
+				if (!empty($_SESSION['flash_messages']))
+					return true;
 			}
 		}
 		return false;
 	}
 	
-	//-----------------------------------------------------------------------------------------------
-	// __toString
-	// "magic" method that will, in this case, return the result from $this->hasMessages()
-	//-----------------------------------------------------------------------------------------------
-	public function __toString() { return $this->hasMessages();	}
+	public function getMessages($type = null)
+	{		
+		if (!$this->hasMessages($type)) return array();
+		
+		if (is_null($type))
+		{
+			return $_SESSION['flash_messages'];
+		}			
+		else
+		{			
+			return $_SESSION['flash_messages'][$type];
+		}	
+	}		
 	
 	
 	//-----------------------------------------------------------------------------------------------
 	// clear()
 	// deletes all the queued messages in the session data
 	//-----------------------------------------------------------------------------------------------
-	public function clear($type='all') { 
-		if( $type == 'all' ) {
-			unset($_SESSION['flash_messages']); 
+	public function clear($type=null) { 
+		if( is_null($type) ) {
+			$_SESSION['flash_messages'] = array(); 
 		} else {
-			unset($_SESSION['flash_messages'][$type]);
+			$_SESSION['flash_messages'][$type] = array();
 		}
 		return true;
 	}
 	
 
-} // end class
-?>
+}
