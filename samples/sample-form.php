@@ -7,7 +7,7 @@ if( !session_id() ) session_start();
 //------------------------------------------------------------------------------
 // Include the Messages class and instantiate it
 //------------------------------------------------------------------------------
-require_once('../class.messages.php');
+require_once('../flashmessages.php');
 $msg = new FlashMessages();
 
 //------------------------------------------------------------------------------
@@ -20,8 +20,8 @@ if( isset($_POST['btn_submit']) ) {
 	// Check for the required fields
 	//
 
-	if( strlen(trim(@$_POST['field1'])) == 0 ) $msg->add('e', 'Field 1 is required!');	
-	if( strlen(trim(@$_POST['field2'])) == 0 ) $msg->add('e', 'Field 2 is required!');	
+	if( strlen(trim(@$_POST['field1'])) == 0 ) $msg->add(FlashMessages::ERROR, 'Field 1 is required!');	
+	if( strlen(trim(@$_POST['field2'])) == 0 ) $msg->add(FlashMessages::ERROR, 'Field 2 is required!');	
 	
 	//
 	// Step 2
@@ -32,7 +32,7 @@ if( isset($_POST['btn_submit']) ) {
 	if( !$msg->hasErrors() ) {
 		
 		// To help demonstrate functionality we'll add a "success" message and redirect the user
-		$msg->add('s', 'The form was valid!');
+		$msg->add(FlashMessages::SUCCESS, 'The form was valid!');
 		
 		// You could technically redirect to any page, and the messages will be displayed as long as the
 		// $msg->display(); code is there. For our sake, we're redirecting back to this page to clear the POST data.
@@ -66,8 +66,9 @@ if( isset($_POST['btn_submit']) ) {
 		<?php
 		//------------------------------------------------------------------------
 		// Display any messages
-		//------------------------------------------------------------------------
-		echo $msg->display();
+		//------------------------------------------------------------------------		
+		$msg->display();
+		
 		?>
 		
 		<form action="" method="post">
