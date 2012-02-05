@@ -9,5 +9,5 @@
 .php-flash-messages.warning { background: #FFFCD3; border: 1px solid #EBCD41; color: #000; }
 .php-flash-messages.warning p { background: url(images/messages/warning.png ) no-repeat 0px 50%; color: #5F4E01; }
 .php-flash-messages.information, .php-flash-messages.info { background: #DFEBFB; border: 1px solid #82AEE7; }
-.php-flash-messages.information p, .php-flash-messages.info p { background: url(images/messages/help.png ) no-repeat 0px 50%; color: #064393; }
+.php-flash-messages.information p, .php-flash-messages.info p { background: url(images/messages/info.png ) no-repeat 0px 50%; color: #064393; }
 .php-flash-messages.information a { text-decoration: underline; }
