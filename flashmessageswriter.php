@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This class used to print flash messages. 
+ * 
+ * @author Andrey Denisov elgato.andrey@gmail.com
+ */
 
 class FlashMessagesWriter {
 	
@@ -41,7 +45,7 @@ class FlashMessagesWriter {
 		{
 			$data = $this->wrapMessage($msgArray, $type);
 		}	
-		// Clear the viewed messages
+		// Clear  viewed messages
 		$this->flashmesages->clear($type);	
 
 		

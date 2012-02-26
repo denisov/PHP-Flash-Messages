@@ -1,32 +1,24 @@
 <?php
-//------------------------------------------------------------------------------
 // A session is required for the messages to work
-//------------------------------------------------------------------------------
 if( !session_id() ) session_start();
 
-//------------------------------------------------------------------------------
 // Include the Messages class and instantiate it
-//------------------------------------------------------------------------------
 require_once('../flashmessages.php');
 $msg = new FlashMessages();
 
-//------------------------------------------------------------------------------
+
 // Process the form if it was submitted
-//------------------------------------------------------------------------------
 if( isset($_POST['btn_submit']) ) {
 	
-	//
+	
 	// Step 1
-	// Check for the required fields
-	//
-
+	// Check for the required fields	
 	if( strlen(trim(@$_POST['field1'])) == 0 ) $msg->add(FlashMessages::ERROR, 'Field 1 is required!');	
 	if( strlen(trim(@$_POST['field2'])) == 0 ) $msg->add(FlashMessages::ERROR, 'Field 2 is required!');	
 	
-	//
+	
 	// Step 2
 	// After all the fields have been validated then check for any errors before proceeding
-	//
 	
 	// If there are no errors then the form was valid. 
 	if( !$msg->hasErrors() ) {
@@ -49,9 +41,7 @@ if( isset($_POST['btn_submit']) ) {
 }
 
 
-//------------------------------------------------------------------------------
 // Print out the HTML page as usual
-//------------------------------------------------------------------------------
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -63,12 +53,10 @@ if( isset($_POST['btn_submit']) ) {
 	<body>
 		
 		<h1>How to Handle Form Validation</h1>
-		<?php
-		//------------------------------------------------------------------------
+		<?php		
 		// Display any messages
-		//------------------------------------------------------------------------		
-		$msg->display();
 		
+		$msg->display();		
 		?>
 		
 		<form action="" method="post">

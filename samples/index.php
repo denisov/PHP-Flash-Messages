@@ -1,18 +1,12 @@
 <?php
-//------------------------------------------------------------------------------
 // A session is required for the messages to work
-//------------------------------------------------------------------------------
 if( !session_id() ) session_start();
 
-//------------------------------------------------------------------------------
-// Include the Messages class and instantiate it
-//------------------------------------------------------------------------------
 require_once('../flashmessages.php');
 $msg = new FlashMessages();
 
-//------------------------------------------------------------------------------
+
 // Add some messages
-//------------------------------------------------------------------------------
 $msg->add(FlashMessages::SUCCESS, 'The is a sample Success Message');
 $msg->add(FlashMessages::SUCCESS, 'The is a sample Success Message2');
 
@@ -25,9 +19,8 @@ $msg->add(FlashMessages::WARNING, 'The is a sample Warning Message2');
 $msg->add(FlashMessages::INFO, 'The is a sample Information Message');
 $msg->add(FlashMessages::INFO, 'The is a sample Information Message2');
 
-//------------------------------------------------------------------------------
+
 // Print the HTML page as usual
-//------------------------------------------------------------------------------
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -40,12 +33,9 @@ $msg->add(FlashMessages::INFO, 'The is a sample Information Message2');
 		
 		<h1>Simple, Session-Based Flash Messages</h1>
 		<?php
-		//------------------------------------------------------------------------
-		// Display any messages
-		//------------------------------------------------------------------------
+		// Display any messages		
 		$msg->display();
-		?>
-		
+		?>		
 		
 		<h3>Create a New Message</h3>
 		<form action="process-form.php" method="post">
