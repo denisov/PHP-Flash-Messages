@@ -7,7 +7,7 @@
 
 class FlashMessagesWriter {
 	
-	private $flashmesages;
+	private $flashmesages; 
 	
 	private $msgClass = 'php-flash-messages';
 	private $msgWrapper = "<div class='%s %s'><a href='#' class='closeMessage'></a>\n%s</div>\n";
