@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../flashmessages.php';
+require_once dirname(__FILE__) . '/../FlashMessages.php';
 
 /**
  * Test class for FlashMessages.

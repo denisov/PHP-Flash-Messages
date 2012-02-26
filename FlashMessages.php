@@ -19,7 +19,7 @@
  */
 
 
-require_once dirname(__FILE__) . '/flashmessageswriter.php';
+require_once dirname(__FILE__) . '/FlashMessagesWriter.php';
 
 class FlashMessages {
 	

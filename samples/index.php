@@ -2,7 +2,7 @@
 // A session is required for the messages to work
 if( !session_id() ) session_start();
 
-require_once('../flashmessages.php');
+require_once('../FlashMessages.php');
 $msg = new FlashMessages();
 
 
